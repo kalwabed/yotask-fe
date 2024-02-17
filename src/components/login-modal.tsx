@@ -14,13 +14,11 @@ import {
 	ModalHeader,
 	ModalOverlay,
 	Text,
-    useDisclosure,
+	useDisclosure,
 } from "@chakra-ui/react";
-import { useAtom } from "jotai";
+import cookie from "js-cookie";
 import ky from "ky";
-import cookie from 'js-cookie'
 import { useForm } from "react-hook-form";
-import { authState } from "../store/auth";
 
 const LoginModal = () => {
 	const {
@@ -28,8 +26,7 @@ const LoginModal = () => {
 		handleSubmit,
 		formState: { errors },
 	} = useForm<{ username: string; password: string }>();
-	const [auth, setAuth] = useAtom(authState);
-	const { onClose } = useDisclosure()
+	const { onClose } = useDisclosure();
 
 	const login = async (data: { username: string; password: string }) => {
 		try {
@@ -42,8 +39,8 @@ const LoginModal = () => {
 				})
 				.json();
 
-			cookie.set('access_token', userLogin.access_token, { expires: 4 })
-			setAuth({ ...auth, accessToken: userLogin.access_token });
+			cookie.set("access_token", userLogin.access_token, { expires: 4 });
+			location.reload();
 		} catch (err) {
 			console.error(err);
 		}
@@ -51,10 +48,10 @@ const LoginModal = () => {
 	return (
 		<Container mt={12}>
 			<Modal isOpen={true} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader />
-          <ModalBody>
+				<ModalOverlay />
+				<ModalContent>
+					<ModalHeader />
+					<ModalBody>
 						<Flex direction="column" gap={4}>
 							<Heading as="h1">Welcome to YoTask</Heading>
 							<Text>Please login to proceed</Text>
@@ -86,11 +83,11 @@ const LoginModal = () => {
 								</Button>
 							</Flex>
 						</Flex>
-          </ModalBody>
+					</ModalBody>
 
-          <ModalFooter />
-        </ModalContent>
-      </Modal>
+					<ModalFooter />
+				</ModalContent>
+			</Modal>
 		</Container>
 	);
 };

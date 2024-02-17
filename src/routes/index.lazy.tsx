@@ -1,28 +1,29 @@
 import { createRootRoute } from "@tanstack/react-router";
 import { useSetAtom } from "jotai";
-import cookie from 'js-cookie'
-import {jwtDecode} from 'jwt-decode'
-import { authState } from "../store/auth";
+import cookie from "js-cookie";
+import { jwtDecode } from "jwt-decode";
+import HomePage from "../components/home";
 import LoginModal from "../components/login-modal";
+import { authState } from "../store/auth";
 
 export const Route = createRootRoute({
 	component: () => {
+		const accessTokenCookie = cookie.get("access_token");
 		const setAuth = useSetAtom(authState);
-		const accessTokenCookie = cookie.get('access_token')
 
 		if (!accessTokenCookie) {
-			return <LoginModal />
+			return <LoginModal />;
 		}
 
-		const jwt = jwtDecode<{ sub: string; username: string }>(accessTokenCookie)
+		const jwt = jwtDecode<{ sub: string; username: string }>(accessTokenCookie);
 		setAuth({
 			accessToken: accessTokenCookie,
 			user: {
 				username: jwt.username,
-				id: jwt.sub
-			}
-		})
+				id: jwt.sub,
+			},
+		});
 
-		return <>hello</>;
+		return <HomePage />;
 	},
 });
