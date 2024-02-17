@@ -16,8 +16,9 @@ import {
 	Text,
     useDisclosure,
 } from "@chakra-ui/react";
-import { useSetAtom } from "jotai";
+import { useAtom } from "jotai";
 import ky from "ky";
+import cookie from 'js-cookie'
 import { useForm } from "react-hook-form";
 import { authState } from "../store/auth";
 
@@ -27,7 +28,7 @@ const LoginModal = () => {
 		handleSubmit,
 		formState: { errors },
 	} = useForm<{ username: string; password: string }>();
-	const setAuth = useSetAtom(authState);
+	const [auth, setAuth] = useAtom(authState);
 	const { onClose } = useDisclosure()
 
 	const login = async (data: { username: string; password: string }) => {
@@ -41,7 +42,8 @@ const LoginModal = () => {
 				})
 				.json();
 
-			setAuth({ accessToken: userLogin.access_token });
+			cookie.set('access_token', userLogin.access_token, { expires: 4 })
+			setAuth({ ...auth, accessToken: userLogin.access_token });
 		} catch (err) {
 			console.error(err);
 		}
