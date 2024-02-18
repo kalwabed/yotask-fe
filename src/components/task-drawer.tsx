@@ -4,7 +4,6 @@ import {
 	DrawerBody,
 	DrawerCloseButton,
 	DrawerContent,
-	DrawerFooter,
 	DrawerHeader,
 	DrawerOverlay,
 	HStack,
@@ -18,22 +17,41 @@ import {
 	Textarea,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 import { FiCheck, FiCheckSquare, FiSquare, FiStar } from "react-icons/fi";
+import { useDebounce } from "react-use";
+import { Task } from "../types/task";
 
 interface Props {
-	isOpen: boolean
-	onClose: () => void
+	isOpen: boolean;
+	onClose: () => void;
+	task: Task;
 }
 
 const TaskDrawer = (props: Props) => {
-	const [status, setStatus] = useState<"pending" | "completed">("pending");
-	const { isOpen, onClose } = props;
+	const { isOpen, onClose, task } = props;
+	const [status, setStatus] = useState<"pending" | "completed">(task.status);
+	const [priority, setPriority] = useState<boolean>(task.priority);
 	const btnRef = useRef(null);
+	const { register, watch } = useForm<{ title: string; desc: string }>({
+		defaultValues: {
+			title: task.title,
+			desc: task.desc,
+		},
+	});
 
 	const MenuIcon = {
 		pending: <FiSquare />,
 		completed: <FiCheckSquare />,
 	};
+
+	useDebounce(
+		() => {
+			console.log("debooo");
+		},
+		500,
+		[watch("title")],
+	);
 
 	return (
 		<Drawer isOpen={isOpen} size="md" onClose={onClose} finalFocusRef={btnRef}>
@@ -72,20 +90,28 @@ const TaskDrawer = (props: Props) => {
 									</MenuItem>
 								</MenuList>
 							</Menu>
-							<Button variant="ghost" leftIcon={<FiStar />} width="fit-content">
+							<Button
+								variant="ghost"
+								leftIcon={<FiStar />}
+								colorScheme={priority ? "yellow" : "gray"}
+								onClick={() => setPriority((prev) => !prev)}
+								width="fit-content"
+							>
 								Priority
 							</Button>
 						</HStack>
-						<Input variant="flushed" placeholder="e.g Laundry" size="lg" />
-						<Textarea placeholder="Bring laundry to Minna's place at 8 o'clock" />
+						<Input
+							variant="flushed"
+							placeholder="e.g Laundry"
+							size="lg"
+							{...register("title")}
+						/>
+						<Textarea
+							placeholder="Bring laundry to Minna's place at 8 o'clock"
+							{...register("desc")}
+						/>
 					</Stack>
 				</DrawerBody>
-				<DrawerFooter>
-					<Button variant="outline" mr={3} onClick={onClose}>
-						Cancel
-					</Button>
-					<Button colorScheme="blue">Save</Button>
-				</DrawerFooter>
 			</DrawerContent>
 		</Drawer>
 	);

@@ -11,19 +11,31 @@ import {
 	Tooltip,
 	useDisclosure,
 } from "@chakra-ui/react";
+import { format } from "@formkit/tempo";
+import { useSetAtom } from "jotai";
 import { useRef, useState } from "react";
 import { FiCheck, FiCheckSquare, FiSquare, FiStar } from "react-icons/fi";
+import { currentTaskState } from "../store/task";
+import { Task as TaskType } from "../types/task";
 import TaskDrawer from "./task-drawer";
 
-const Task = () => {
-	const [status, setStatus] = useState<"pending" | "completed">("pending");
+interface Props extends TaskType {}
+
+const Task = (task: Props) => {
+	const [status, setStatus] = useState<"pending" | "completed">(task.status);
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const setCurrentTask = useSetAtom(currentTaskState);
 	const btnRef = useRef(null);
 
 	const MenuIcon = {
 		pending: <FiSquare />,
 		completed: <FiCheckSquare />,
 	};
+
+	function onOpenDrawer() {
+		setCurrentTask(task);
+		onOpen();
+	}
 
 	return (
 		<Flex align="center">
@@ -55,20 +67,25 @@ const Task = () => {
 				</MenuList>
 			</Menu>
 			<Tooltip hasArrow label="Priority">
-				<IconButton icon={<FiStar />} aria-label="Task priority" variant="ghost" colorScheme="yellow" />
+				<IconButton
+					icon={<FiStar />}
+					aria-label="Task priority"
+					variant="ghost"
+					colorScheme="yellow"
+				/>
 			</Tooltip>
 			<Button
 				ref={btnRef}
-				onClick={onOpen}
+				onClick={onOpenDrawer}
 				variant="ghost"
 				width="100%"
 				fontWeight="normal"
 			>
-				<Text>Judulnya apa ya</Text>
-				<Text ml="auto">11 Feb</Text>
+				<Text>{task.title}</Text>
+				<Text ml="auto">{format(new Date(task.createdAt), "D MMM")}</Text>
 			</Button>
 
-			<TaskDrawer isOpen={isOpen} onClose={onClose} />
+			<TaskDrawer task={task} isOpen={isOpen} onClose={onClose} />
 		</Flex>
 	);
 };
