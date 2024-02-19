@@ -1,5 +1,10 @@
 import { ChakraProvider } from "@chakra-ui/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { queryClientAtom } from "jotai-tanstack-query";
+import { Provider } from "jotai/react";
+import { useHydrateAtoms } from "jotai/react/utils";
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 
@@ -16,13 +21,27 @@ declare module "@tanstack/react-router" {
 	}
 }
 
+const queryClient = new QueryClient();
+
+const HydrateAtoms = ({ children }) => {
+	useHydrateAtoms([[queryClientAtom, queryClient]]);
+	return children;
+};
+
 const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
 	const root = ReactDOM.createRoot(rootElement);
 	root.render(
 		<React.StrictMode>
 			<ChakraProvider>
-				<RouterProvider router={router} />
+				<QueryClientProvider client={queryClient}>
+					<Provider>
+						<HydrateAtoms>
+							<RouterProvider router={router} />
+						</HydrateAtoms>
+					</Provider>
+					<ReactQueryDevtools initialIsOpen={false} />
+				</QueryClientProvider>
 			</ChakraProvider>
 		</React.StrictMode>,
 	);

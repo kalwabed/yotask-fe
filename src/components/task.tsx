@@ -33,6 +33,7 @@ const Task = (task: Props) => {
 	};
 
 	function onOpenDrawer() {
+		console.log(task);
 		setCurrentTask(task);
 		onOpen();
 	}

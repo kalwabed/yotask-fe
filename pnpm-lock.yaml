@@ -20,6 +20,12 @@ dependencies:
   '@formkit/tempo':
     specifier: ^0.0.9
     version: 0.0.9
+  '@tanstack/query-core':
+    specifier: ^5.21.7
+    version: 5.21.7
+  '@tanstack/react-query':
+    specifier: ^5.21.7
+    version: 5.21.7(react@18.2.0)
   '@tanstack/react-router':
     specifier: ^1.16.2
     version: 1.16.2(react-dom@18.2.0)(react@18.2.0)
@@ -29,6 +35,9 @@ dependencies:
   jotai:
     specifier: ^2.6.4
     version: 2.6.4(@types/react@18.2.55)(react@18.2.0)
+  jotai-tanstack-query:
+    specifier: ^0.8.5
+    version: 0.8.5(@tanstack/query-core@5.21.7)(jotai@2.6.4)(wonka@6.3.4)
   js-cookie:
     specifier: ^3.0.5
     version: 3.0.5
@@ -53,8 +62,14 @@ dependencies:
   react-use:
     specifier: ^17.5.0
     version: 17.5.0(react-dom@18.2.0)(react@18.2.0)
+  wonka:
+    specifier: ^6.3.4
+    version: 6.3.4
 
 devDependencies:
+  '@tanstack/react-query-devtools':
+    specifier: ^5.21.7
+    version: 5.21.7(@tanstack/react-query@5.21.7)(react@18.2.0)
   '@tanstack/router-devtools':
     specifier: ^1.16.4
     version: 1.16.4(react-dom@18.2.0)(react@18.2.0)
@@ -1907,6 +1922,32 @@ packages:
     resolution: {integrity: sha512-ToaeMtK5S4YaxCywAlYexc7KPFN0esjyTZ4vXzJhXEWAkro9iHgh7m/4ozPJb7oTo65WkHWX0W9GjcZbInSD8w==}
     engines: {node: '>=12'}
 
+  /@tanstack/query-core@5.21.7:
+    resolution: {integrity: sha512-z0NSWFsM75esVmkxeuDWeyo9Wv4CZ/WsLMZgu1Zz164S6Oc/57NMia88dTu/d51wdVowMTAcDMQgRmiWmyPMxQ==}
+
+  /@tanstack/query-devtools@5.21.5:
+    resolution: {integrity: sha512-A7rVpVP1GRcQBnB/GzXZfVhxmoP17J1f+RoYRu+DOV8Jp4QPIJRE/nFueEiiRPSVL7aNcNw4rTm0RmJZRI2fUA==}
+    dev: true
+
+  /@tanstack/react-query-devtools@5.21.7(@tanstack/react-query@5.21.7)(react@18.2.0):
+    resolution: {integrity: sha512-SfGw5KErNfeC8beEfV3vg9QjxVUaJkDEkZGfjVEHdHR/H9owmf1SI8FLDH3GtWXMO0YczaKjDiFyvMSZUk2I1Q==}
+    peerDependencies:
+      '@tanstack/react-query': ^5.21.7
+      react: ^18.0.0
+    dependencies:
+      '@tanstack/query-devtools': 5.21.5
+      '@tanstack/react-query': 5.21.7(react@18.2.0)
+      react: 18.2.0
+    dev: true
+
+  /@tanstack/react-query@5.21.7(react@18.2.0):
+    resolution: {integrity: sha512-Op9nVL/L0Lg+aSPFSGbrymu6d3tzUoZ+FZ+rRIZpu5HkGasflqzhsXkL26Sa+MEwLyox7Q1erSFwNIRO3TYjXQ==}
+    peerDependencies:
+      react: ^18.0.0
+    dependencies:
+      '@tanstack/query-core': 5.21.7
+      react: 18.2.0
+
   /@tanstack/react-router@1.16.2(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-GgAxcs3JQjpC/nQd81S9MQ2wC9aPEw+fBt0n1VwYl/vW571OpU4HfRawu/OT4piHcV9/VS5oAUoZlwtApI0hLw==}
     engines: {node: '>=12'}
@@ -2865,6 +2906,18 @@ packages:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
     dev: true
 
+  /jotai-tanstack-query@0.8.5(@tanstack/query-core@5.21.7)(jotai@2.6.4)(wonka@6.3.4):
+    resolution: {integrity: sha512-cFq+1sE7Qkt7Kh9Db2KE8LXdbPiGwCiy8S5YSEnjUDxF59A4XhoXTDJBuPiMIA1dD1/yMsNKr1ADfN5CvscYZw==}
+    peerDependencies:
+      '@tanstack/query-core': '*'
+      jotai: '>=2.0.0'
+      wonka: ^6.3.4
+    dependencies:
+      '@tanstack/query-core': 5.21.7
+      jotai: 2.6.4(@types/react@18.2.55)(react@18.2.0)
+      wonka: 6.3.4
+    dev: false
+
   /jotai@2.6.4(@types/react@18.2.55)(react@18.2.0):
     resolution: {integrity: sha512-RniwQPX4893YlNR1muOtyUGHYaTD1fhEN4qnOuZJSrDHj6xdEMrqlRSN/hCm2fshwk78ruecB/P2l+NCVWe6TQ==}
     engines: {node: '>=12.20.0'}
@@ -3657,6 +3710,10 @@ packages:
     dependencies:
       isexe: 2.0.0
     dev: true
+
+  /wonka@6.3.4:
+    resolution: {integrity: sha512-CjpbqNtBGNAeyNS/9W6q3kSkKE52+FjIj7AkFlLr11s/VWGUu6a2CdYSdGxocIhIVjaW/zchesBQUKPVU69Cqg==}
+    dev: false
 
   /wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}

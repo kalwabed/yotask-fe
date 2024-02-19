@@ -16,7 +16,7 @@ import {
 	Stack,
 	Textarea,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FiCheck, FiCheckSquare, FiSquare, FiStar } from "react-icons/fi";
 import { useDebounce } from "react-use";
@@ -45,13 +45,17 @@ const TaskDrawer = (props: Props) => {
 		completed: <FiCheckSquare />,
 	};
 
-	useDebounce(
+	const [, cancel] = useDebounce(
 		() => {
 			console.log("debooo");
 		},
 		500,
-		[watch("title")],
+		[watch("title"), watch("desc"), status, priority],
 	);
+
+	useEffect(() => {
+		cancel();
+	}, [cancel]);
 
 	return (
 		<Drawer isOpen={isOpen} size="md" onClose={onClose} finalFocusRef={btnRef}>
