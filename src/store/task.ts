@@ -1,8 +1,12 @@
-import { atomWithQuery } from "jotai-tanstack-query";
+import { atomWithMutation, atomWithQuery } from "jotai-tanstack-query";
 import { atomWithReset } from "jotai/utils";
 import ky from "ky";
 import { authState } from "../store/auth";
 import { Task } from "../types/task";
+
+const SERVER_URL = "http://localhost:8000";
+
+const fetch = ky.extend({ prefixUrl: SERVER_URL });
 
 export const currentTaskState = atomWithReset<Task>({
 	_id: "",
@@ -14,15 +18,31 @@ export const currentTaskState = atomWithReset<Task>({
 });
 
 export const getTasksAtom = atomWithQuery((get) => ({
-	queryKey: ["users", get(authState).user.id],
-	queryFn: async () => {
-		const tasks: Task[] = await ky
-			.get("http://localhost:8000/tasks", {
+	queryKey: ["tasks", "user", get(authState).user.id],
+	queryFn: async ({ queryKey: [, , id] }) => {
+		const tasks: Task[] = await fetch
+			.get(`tasks/user/${id}`, {
 				headers: {
 					authorization: `Bearer ${get(authState).accessToken}`,
 				},
 			})
 			.json();
 		return tasks;
+	},
+}));
+
+export const updateTaskAtom = atomWithMutation((get) => ({
+	mutationKey: ["tasks", get(currentTaskState)._id],
+	mutationFn: async (task: Omit<Task, "createdAt">) => {
+		const res = await fetch
+			.patch(`tasks/${task._id}`, {
+				json: task,
+				headers: {
+					authorization: `Bearer ${get(authState).accessToken}`,
+				},
+			})
+			.json();
+
+		return res;
 	},
 }));

@@ -16,10 +16,13 @@ import {
 	Stack,
 	Textarea,
 } from "@chakra-ui/react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useAtomValue } from "jotai";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FiCheck, FiCheckSquare, FiSquare, FiStar } from "react-icons/fi";
 import { useDebounce } from "react-use";
+import { updateTaskAtom } from "../store/task";
 import { Task } from "../types/task";
 
 interface Props {
@@ -33,7 +36,12 @@ const TaskDrawer = (props: Props) => {
 	const [status, setStatus] = useState<"pending" | "completed">(task.status);
 	const [priority, setPriority] = useState<boolean>(task.priority);
 	const btnRef = useRef(null);
-	const { register, watch } = useForm<{ title: string; desc: string }>({
+	const { mutateAsync } = useAtomValue(updateTaskAtom);
+	const queryClient = useQueryClient();
+	const { register, watch, getValues } = useForm<{
+		title: string;
+		desc: string;
+	}>({
 		defaultValues: {
 			title: task.title,
 			desc: task.desc,
@@ -46,8 +54,15 @@ const TaskDrawer = (props: Props) => {
 	};
 
 	const [, cancel] = useDebounce(
-		() => {
-			console.log("debooo");
+		async () => {
+			await mutateAsync({
+				_id: task._id,
+				priority,
+				status,
+				title: getValues("title"),
+				desc: getValues("desc"),
+			});
+			queryClient.invalidateQueries({ queryKey: ["tasks"] });
 		},
 		500,
 		[watch("title"), watch("desc"), status, priority],
