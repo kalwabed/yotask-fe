@@ -20,8 +20,8 @@ import {
 	FiCheckSquare,
 	FiMoreHorizontal,
 	FiSquare,
-	FiStar,
 } from "react-icons/fi";
+import { HiMiniStar } from "react-icons/hi2";
 import { currentTaskState, updateTaskAtom } from "../store/task";
 import { Status, Task as TaskType } from "../types/task";
 import TaskDrawer from "./task-drawer";
@@ -94,7 +94,7 @@ const Task = (task: Props) => {
 			</Menu>
 			<Tooltip hasArrow label="Priority">
 				<IconButton
-					icon={<FiStar />}
+					icon={<HiMiniStar />}
 					aria-label="Task priority"
 					variant="ghost"
 					colorScheme={task.priority ? "yellow" : "gray"}
@@ -107,6 +107,7 @@ const Task = (task: Props) => {
 				variant="ghost"
 				width="100%"
 				fontWeight="normal"
+				color={task.status === "completed" ? "gray.500" : "inherit"}
 			>
 				<Text>{task.title}</Text>
 				<Tooltip

@@ -27,8 +27,8 @@ import {
 	FiCheckSquare,
 	FiMoreHorizontal,
 	FiSquare,
-	FiStar,
 } from "react-icons/fi";
+import { HiMiniStar } from "react-icons/hi2";
 import { useDebounce } from "react-use";
 import { updateTaskAtom } from "../store/task";
 import { Status, Task } from "../types/task";
@@ -122,7 +122,7 @@ const TaskDrawer = (props: Props) => {
 							</Menu>
 							<Button
 								variant="ghost"
-								leftIcon={<FiStar />}
+								leftIcon={<HiMiniStar />}
 								colorScheme={priority ? "yellow" : "gray"}
 								onClick={() => setPriority((prev) => !prev)}
 								width="fit-content"

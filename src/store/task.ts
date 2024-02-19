@@ -15,6 +15,7 @@ export const currentTaskState = atomWithReset<Task>({
 	priority: false,
 	status: "pending",
 	createdAt: "",
+	updatedAt: "",
 });
 
 export const getTasksAtom = atomWithQuery((get) => ({
