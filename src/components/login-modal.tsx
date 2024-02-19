@@ -31,7 +31,8 @@ const LoginModal = () => {
 	const login = async (data: { username: string; password: string }) => {
 		try {
 			const userLogin: { access_token: string } = await ky
-				.post("http://localhost:8000/auth/login", {
+				.post("auth/login", {
+					prefixUrl: import.meta.env.VITE_SERVER_URL,
 					json: {
 						username: data.username,
 						password: data.password,

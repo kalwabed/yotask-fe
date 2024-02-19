@@ -4,7 +4,7 @@ import ky from "ky";
 import { authState } from "../store/auth";
 import { Task } from "../types/task";
 
-const SERVER_URL = "http://localhost:8000";
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 const fetch = ky.extend({ prefixUrl: SERVER_URL });
 
