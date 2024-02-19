@@ -12,13 +12,19 @@ import {
 	useDisclosure,
 } from "@chakra-ui/react";
 import { format } from "@formkit/tempo";
+import { useQueryClient } from "@tanstack/react-query";
 import { useAtomValue, useSetAtom } from "jotai";
 import { useRef } from "react";
-import { FiCheck, FiCheckSquare, FiSquare, FiStar } from "react-icons/fi";
+import {
+	FiCheck,
+	FiCheckSquare,
+	FiMoreHorizontal,
+	FiSquare,
+	FiStar,
+} from "react-icons/fi";
 import { currentTaskState, updateTaskAtom } from "../store/task";
-import { Task as TaskType } from "../types/task";
+import { Status, Task as TaskType } from "../types/task";
 import TaskDrawer from "./task-drawer";
-import { useQueryClient } from "@tanstack/react-query";
 
 interface Props extends TaskType {}
 
@@ -30,24 +36,24 @@ const Task = (task: Props) => {
 	const queryClient = useQueryClient();
 
 	const MenuIcon = {
-		pending: <FiSquare />,
+		pending: <FiMoreHorizontal />,
+		progress: <FiSquare />,
 		completed: <FiCheckSquare />,
 	};
 
 	function onOpenDrawer() {
-		console.log(task);
 		setCurrentTask(task);
 		onOpen();
 	}
 
-	async function updateStatus(currentStatus: "pending" | "completed") {
-		await mutateAsync({ _id: task._id, status: currentStatus})
-		await queryClient.invalidateQueries({ queryKey: ["tasks"]})
+	async function updateStatus(currentStatus: Status) {
+		await mutateAsync({ _id: task._id, status: currentStatus });
+		await queryClient.invalidateQueries({ queryKey: ["tasks"] });
 	}
 
 	async function updatePriority() {
-		await mutateAsync({ _id: task._id, priority: !task.priority})
-		queryClient.invalidateQueries({ queryKey: ["tasks"]})
+		await mutateAsync({ _id: task._id, priority: !task.priority });
+		await queryClient.invalidateQueries({ queryKey: ["tasks"] });
 	}
 
 	return (
@@ -64,9 +70,16 @@ const Task = (task: Props) => {
 				</Tooltip>
 				<MenuList>
 					<MenuItem onClick={() => updateStatus("pending")}>
-						<Icon as={FiSquare} mr="12px" />
+						<Icon as={FiMoreHorizontal} mr="12px" />
 						Pending
-						{task.status === 'pending' && (
+						{task.status === "pending" && (
+							<Icon as={FiCheck} height="13px" width="13px" ml="auto" />
+						)}
+					</MenuItem>
+					<MenuItem onClick={() => updateStatus("progress")}>
+						<Icon as={FiSquare} mr="12px" />
+						In Progress
+						{task.status === "progress" && (
 							<Icon as={FiCheck} height="13px" width="13px" ml="auto" />
 						)}
 					</MenuItem>

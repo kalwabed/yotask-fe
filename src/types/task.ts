@@ -3,6 +3,8 @@ export interface Task {
 	title: string;
 	desc: string;
 	priority: boolean;
-	status: "pending" | "completed";
+	status: Status;
 	createdAt: string;
 }
+
+export type Status = "pending" | "progress" | "completed";

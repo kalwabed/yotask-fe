@@ -23,7 +23,7 @@ import { useForm } from "react-hook-form";
 import { FiCheck, FiCheckSquare, FiSquare, FiStar } from "react-icons/fi";
 import { useDebounce } from "react-use";
 import { updateTaskAtom } from "../store/task";
-import { Task } from "../types/task";
+import { Status, Task } from "../types/task";
 
 interface Props {
 	isOpen: boolean;
@@ -33,7 +33,7 @@ interface Props {
 
 const TaskDrawer = (props: Props) => {
 	const { isOpen, onClose, task } = props;
-	const [status, setStatus] = useState<"pending" | "completed">(task.status);
+	const [status, setStatus] = useState<Status>(task.status);
 	const [priority, setPriority] = useState<boolean>(task.priority);
 	const btnRef = useRef(null);
 	const { mutateAsync } = useAtomValue(updateTaskAtom);
