@@ -3,18 +3,24 @@ import {
 	Button,
 	Flex,
 	Heading,
+	IconButton,
 	Menu,
 	MenuButton,
 	MenuItem,
 	MenuList,
 	Spacer,
+	Tooltip,
+	useDisclosure,
 } from "@chakra-ui/react";
 import { useAtomValue } from "jotai";
 import cookie from "js-cookie";
+import { HiPlus } from "react-icons/hi2";
 import { authState } from "../store/auth";
+import ModalNewTask from "./modal-new-task";
 
 const PageHeader = () => {
 	const auth = useAtomValue(authState);
+	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	function logout() {
 		cookie.remove("access_token");
@@ -22,18 +28,19 @@ const PageHeader = () => {
 	}
 
 	return (
-		<Flex
-			bgColor="blue.100"
-			py={2}
-			px={4}
-			border="1px solid"
-			borderColor="blue.200"
-			rounded="md"
-			align="center"
-		>
+		<Flex py={2} px={4} rounded="md" align="center">
 			<Heading size="md">YoTask</Heading>
 			<Spacer />
-			<Flex>
+			<Flex align="center">
+				<Tooltip label="Add new task">
+					<IconButton
+						icon={<HiPlus />}
+						isRound
+						aria-label="Add new task"
+						variant="ghost"
+						onClick={onOpen}
+					/>
+				</Tooltip>
 				<Menu isLazy>
 					<MenuButton as={Button} size="sm" variant="ghost">
 						<Flex align="center" gap={2}>
@@ -48,6 +55,8 @@ const PageHeader = () => {
 					</MenuList>
 				</Menu>
 			</Flex>
+
+			<ModalNewTask isOpen={isOpen} onClose={onClose} />
 		</Flex>
 	);
 };

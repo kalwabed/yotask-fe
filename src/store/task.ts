@@ -47,3 +47,19 @@ export const updateTaskAtom = atomWithMutation((get) => ({
 		return res;
 	},
 }));
+
+export const createTaskAtom = atomWithMutation((get) => ({
+	mutationKey: ["tasks", "new"],
+	mutationFn: async (task: Partial<Task>) => {
+		const res = await fetch
+			.post("tasks", {
+				json: task,
+				headers: {
+					authorization: `Bearer ${get(authState).accessToken}`,
+				},
+			})
+			.json();
+
+		return res;
+	},
+}));
