@@ -63,3 +63,18 @@ export const createTaskAtom = atomWithMutation((get) => ({
 		return res;
 	},
 }));
+
+export const removeTaskAtom = atomWithMutation((get) => ({
+	mutationKey: ["tasks", "remove"],
+	mutationFn: async (id: string) => {
+		const res = await fetch
+			.delete(`tasks/${id}`, {
+				headers: {
+					authorization: `Bearer ${get(authState).accessToken}`,
+				},
+			})
+			.json();
+
+		return res;
+	},
+}));

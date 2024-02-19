@@ -13,7 +13,7 @@ import {
 	ModalOverlay,
 	Textarea,
 	VStack,
-    useToast,
+	useToast,
 } from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
@@ -41,8 +41,7 @@ const ModalNewTask = (props: Props) => {
 	const [priority, setPriority] = useState<boolean>(false);
 	const { mutateAsync } = useAtomValue(createTaskAtom);
 	const queryClient = useQueryClient();
-  const toast = useToast()
-
+	const toast = useToast();
 
 	async function onSubmit(data: Partial<Task>) {
 		await mutateAsync({ ...data, priority, status });
@@ -51,8 +50,8 @@ const ModalNewTask = (props: Props) => {
 			title: "Task created",
 			description: "We've created a new task.",
 			status: "success",
-			position: "top"
-		})
+			position: "top",
+		});
 		onClose();
 		reset();
 		setStatus("pending");
