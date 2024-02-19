@@ -5,7 +5,7 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { queryClientAtom } from "jotai-tanstack-query";
 import { Provider } from "jotai/react";
 import { useHydrateAtoms } from "jotai/react/utils";
-import * as React from "react";
+import {StrictMode, ReactNode } from "react";
 import * as ReactDOM from "react-dom/client";
 
 // Import the generated route tree
@@ -23,7 +23,7 @@ declare module "@tanstack/react-router" {
 
 const queryClient = new QueryClient();
 
-const HydrateAtoms = ({ children }) => {
+const HydrateAtoms = ({ children }: {children: ReactNode}) => {
 	useHydrateAtoms([[queryClientAtom, queryClient]]);
 	return children;
 };
@@ -32,7 +32,7 @@ const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
 	const root = ReactDOM.createRoot(rootElement);
 	root.render(
-		<React.StrictMode>
+		<StrictMode>
 			<ChakraProvider>
 				<QueryClientProvider client={queryClient}>
 					<Provider>
@@ -43,6 +43,6 @@ if (!rootElement.innerHTML) {
 					<ReactQueryDevtools initialIsOpen={false} />
 				</QueryClientProvider>
 			</ChakraProvider>
-		</React.StrictMode>,
+		</StrictMode>,
 	);
 }
