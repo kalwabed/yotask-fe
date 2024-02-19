@@ -28,7 +28,7 @@ const PageHeader = () => {
 	}
 
 	return (
-		<Flex py={2} px={4} rounded="md" align="center">
+		<Flex rounded="md" align="center">
 			<Heading size="md">YoTask</Heading>
 			<Spacer />
 			<Flex align="center">
