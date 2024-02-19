@@ -33,7 +33,7 @@ export const getTasksAtom = atomWithQuery((get) => ({
 
 export const updateTaskAtom = atomWithMutation((get) => ({
 	mutationKey: ["tasks", get(currentTaskState)._id],
-	mutationFn: async (task: Omit<Task, "createdAt">) => {
+	mutationFn: async (task: Partial<Task>) => {
 		const res = await fetch
 			.patch(`tasks/${task._id}`, {
 				json: task,
