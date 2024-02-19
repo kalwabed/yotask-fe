@@ -8,14 +8,14 @@ import {
 	ModalOverlay,
 	useDisclosure,
 } from "@chakra-ui/react";
-import { useAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import { loginState } from "../store/auth";
 import LoginForm from "./login-form";
 import SignupForm from "./signup-form";
 
 const LoginModal = () => {
 	const { onClose } = useDisclosure();
-	const [userState, setUserstate] = useAtom(loginState);
+	const userState = useAtomValue(loginState);
 
 	return (
 		<Container mt={12}>

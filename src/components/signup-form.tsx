@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useSetAtom } from "jotai";
 import cookie from "js-cookie";
-import ky from "ky";
+import ky, { HTTPError } from "ky";
 import { useForm } from "react-hook-form";
 import { loginState } from "../store/auth";
 
@@ -44,7 +44,7 @@ const SignupForm = () => {
 			cookie.set("access_token", userSignup.access_token, { expires: 4 });
 			location.reload();
 		} catch (err) {
-			const error: { message: string } = await err.response.json();
+			const error: { message: string } = await (err as HTTPError).response.json();
 			toast({
 				title: "Failed to sign up",
 				description: error.message,
