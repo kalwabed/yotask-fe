@@ -28,7 +28,10 @@ export const getTasksAtom = atomWithQuery((get) => ({
 				},
 			})
 			.json();
-		return tasks;
+		
+		// sort by priority
+		const sortedTasks = tasks.sort((a, b) => Number(b.priority) - Number(a.priority))
+		return sortedTasks;
 	},
 }));
 
