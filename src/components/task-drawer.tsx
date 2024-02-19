@@ -14,16 +14,25 @@ import {
 	MenuItem,
 	MenuList,
 	Stack,
+	Text,
 	Textarea,
 } from "@chakra-ui/react";
+import { format } from "@formkit/tempo";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { FiCheck, FiCheckSquare, FiSquare, FiStar } from "react-icons/fi";
+import {
+	FiCheck,
+	FiCheckSquare,
+	FiMoreHorizontal,
+	FiSquare,
+	FiStar,
+} from "react-icons/fi";
 import { useDebounce } from "react-use";
 import { updateTaskAtom } from "../store/task";
 import { Status, Task } from "../types/task";
+import { MenuIcon } from "./task";
 
 interface Props {
 	isOpen: boolean;
@@ -47,11 +56,6 @@ const TaskDrawer = (props: Props) => {
 			desc: task.desc,
 		},
 	});
-
-	const MenuIcon = {
-		pending: <FiSquare />,
-		completed: <FiCheckSquare />,
-	};
 
 	const [, cancel] = useDebounce(
 		async () => {
@@ -80,7 +84,7 @@ const TaskDrawer = (props: Props) => {
 				<DrawerHeader>Update task</DrawerHeader>
 
 				<DrawerBody>
-					<Stack gap={8}>
+					<Stack mb={6} gap={8}>
 						<HStack>
 							<Menu>
 								<MenuButton
@@ -94,9 +98,16 @@ const TaskDrawer = (props: Props) => {
 								</MenuButton>
 								<MenuList>
 									<MenuItem onClick={() => setStatus("pending")}>
-										<Icon as={FiSquare} mr="12px" />
+										<Icon as={FiMoreHorizontal} mr="12px" />
 										Pending
 										{status === "pending" && (
+											<Icon as={FiCheck} height="13px" width="13px" ml="auto" />
+										)}
+									</MenuItem>
+									<MenuItem onClick={() => setStatus("progress")}>
+										<Icon as={FiSquare} mr="12px" />
+										In Progress
+										{status === "progress" && (
 											<Icon as={FiCheck} height="13px" width="13px" ml="auto" />
 										)}
 									</MenuItem>
@@ -130,6 +141,13 @@ const TaskDrawer = (props: Props) => {
 							{...register("desc")}
 						/>
 					</Stack>
+					<Text as="small" color="gray.500">
+						Last update:{" "}
+						{format(new Date(task.updatedAt), {
+							date: "medium",
+							time: "medium",
+						})}
+					</Text>
 				</DrawerBody>
 			</DrawerContent>
 		</Drawer>

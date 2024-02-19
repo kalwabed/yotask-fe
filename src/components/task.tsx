@@ -28,18 +28,18 @@ import TaskDrawer from "./task-drawer";
 
 interface Props extends TaskType {}
 
+export const MenuIcon = {
+	pending: <FiMoreHorizontal />,
+	progress: <FiSquare />,
+	completed: <FiCheckSquare />,
+};
+
 const Task = (task: Props) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const setCurrentTask = useSetAtom(currentTaskState);
 	const btnRef = useRef(null);
 	const { mutateAsync } = useAtomValue(updateTaskAtom);
 	const queryClient = useQueryClient();
-
-	const MenuIcon = {
-		pending: <FiMoreHorizontal />,
-		progress: <FiSquare />,
-		completed: <FiCheckSquare />,
-	};
 
 	function onOpenDrawer() {
 		setCurrentTask(task);
@@ -109,7 +109,14 @@ const Task = (task: Props) => {
 				fontWeight="normal"
 			>
 				<Text>{task.title}</Text>
-				<Text ml="auto">{format(new Date(task.createdAt), "D MMM")}</Text>
+				<Tooltip
+					label={format(new Date(task.createdAt), {
+						date: "long",
+						time: "long",
+					})}
+				>
+					<Text ml="auto">{format(new Date(task.createdAt), "D MMM")}</Text>
+				</Tooltip>
 			</Button>
 
 			<TaskDrawer task={task} isOpen={isOpen} onClose={onClose} />
