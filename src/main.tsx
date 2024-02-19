@@ -5,7 +5,7 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { queryClientAtom } from "jotai-tanstack-query";
 import { Provider } from "jotai/react";
 import { useHydrateAtoms } from "jotai/react/utils";
-import {StrictMode, ReactNode } from "react";
+import { ReactNode, StrictMode } from "react";
 import * as ReactDOM from "react-dom/client";
 
 // Import the generated route tree
@@ -23,7 +23,7 @@ declare module "@tanstack/react-router" {
 
 const queryClient = new QueryClient();
 
-const HydrateAtoms = ({ children }: {children: ReactNode}) => {
+const HydrateAtoms = ({ children }: { children: ReactNode }) => {
 	useHydrateAtoms([[queryClientAtom, queryClient]]);
 	return children;
 };

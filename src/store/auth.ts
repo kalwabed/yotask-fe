@@ -7,3 +7,5 @@ export const authState = atom({
 		id: "",
 	},
 });
+
+export const loginState = atom<"login" | "signup">("login");
